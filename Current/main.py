@@ -1,4 +1,5 @@
 import os
+import math
 
 from google.auth.transport.requests import Request
 from google.oauth2.credentials import Credentials
@@ -9,6 +10,34 @@ from googleapiclient.errors import HttpError
 SCOPES = ["https://www.googleapis.com/auth/spreadsheets"]
 SPREADSHEET_ID = "1j2aWRBBqD1WZRQs5BYdEuEIf27r-dB6ojgJL1xHoQtE"
 API_KEY = "AIzaSyAMIz6KxsyusnXcgpXInBoVzEESIIWfv3E"
+
+
+def get_student_status(student, total_lessons):
+    abscences = int(student[2])
+    abscence_rate = abscences / total_lessons
+    abscent_reproval = abscence_rate > 0.25
+    grade_1, grade_2, grade_3 = student[3:6]
+    average_score = math.ceil((int(grade_1) + int(grade_2) + int(grade_3)) / 3)
+
+    status = ""
+    needed_grade = ""
+
+    match average_score:
+        case _ if abscent_reproval:
+            status = "Reprovado por Falta"
+            needed_grade = "0"
+        case _ if average_score >= 70:
+            status = "Aprovado"
+            needed_grade = "0"
+        case _ if 50 <= average_score < 70:
+            final_score = 100 - average_score
+            status = "Exame Final"
+            needed_grade = f"{final_score}"
+        case _ if average_score < 50:
+            status = "Reprovado"
+            needed_grade = "0"
+
+    return [status, needed_grade]
 
 
 def calculate_final_score():
@@ -27,70 +56,23 @@ def calculate_final_score():
     try:
         service = build('sheets', 'v4', credentials=credentials)
         sheets = service.spreadsheets()
-        table = service.spreadsheets().values().get(spreadsheetId=SPREADSHEET_ID, range="A1:H27").execute()
+        table = service.spreadsheets().values().get(spreadsheetId=SPREADSHEET_ID, range="A1:H").execute()
+        students_list = table["values"][3:]
         total_lessons = int(table["values"][1][0].split(": ")[1])
+
+        students_grades = list(map(lambda student: get_student_status(student, total_lessons), students_list))
+
         print(table["values"])
+        # for grade in students_grades:
+        #     print(grade)
 
-        list = []
-        for key, row in enumerate(table["values"]):
-            # print(key,row)
-            if key >= 3:
-                abscences = int(row[2])
-                rate = abscences / total_lessons
-                # print(list)
-                n1, n2, n3 = row[3:6]
-                # print(n1, n2, n3)
-                average_score = (int(n1) + int(n2) + int(n3)) / 3
-                # print(average_score)
+        body = {
+            "values": students_grades
+        }
 
-                if average_score >= 70:
-                    list.append(["Aprovado", "0"])
-                    # print(row[1])
-                    continue
-
-                if 50 >= average_score < 70:
-                    final_score = 100 - average_score
-                    list.append(["Exame Final", f"{final_score}"])
-
-                if average_score < 50:
-                    list.append(["Reprovado", "0"])
-
-                if (rate) > 0.25:
-                    # print(row[1])
-                    list.append(["Reprovado por Falta", "0"])
-
-                print(list)
-
-        # final_result = list
-        #
-        # body = {
-        #     "values": final_result
-        # }
-        #
-        # result = sheets.values().update(spreadsheetId=SPREADSHEET_ID, range="G1:H27", valueInputOption="RAW",
-        #                                 body=body).execute()
-        # print('{0} cells updated.'.format(result.get('updatedCells')))
-
-        # if average_score < 50:
-
-
-
-    #     table = service.spreadsheets().values().get(spreadsheetId=SPREADSHEET_ID, range="A4:A").execute()
-    #     table_value = table.get("values", [])
-    #     size = len(table_value)
-    #     total_lessons_string = \
-    #         sheets.values().get(spreadsheetId=SPREADSHEET_ID, range="engenharia_de_software!A2:H2").execute().get(
-    #             "values")[
-    #             0][0]
-    #     total_lessons_number = total_lessons_string.split(":")
-    #     i = 4
-    #
-    #     for row in range(4, size):
-    #         if i <= (size):
-    #             student1 = sheets.values().get(spreadsheetId=SPREADSHEET_ID,range="engenharia_de_software!A4:H").execute().get("values", [])
-    #             score_average = (int(student1[i-4][3]) + int(student1[i-4][4]) + int(student1[i-4][5])) / 3
-    #             if score_average >= 50:
-    #                 sheets.values().update(spreadsheetId=SPREADSHEET_ID, range=f"engenharia_de_software!G{row}",valueInputOption="USER_ENTERED",body={"values": [["reprovado teste"]]}).execute()
+        result = sheets.values().update(spreadsheetId=SPREADSHEET_ID, range="G4:H", valueInputOption="RAW",
+                                        body=body).execute()
+        print('{0} cells updated.'.format(result.get('updatedCells')))
 
     except HttpError as error:
         print(error)
