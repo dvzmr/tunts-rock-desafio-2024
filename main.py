@@ -39,6 +39,7 @@ def get_student_status(student: list[str], total_lessons: int) -> list[str]:
 
 
 def get_credentials():
+    credentials = None
     if os.path.exists('token.json'):
         credentials = Credentials.from_authorized_user_file(
             'token.json', SCOPES
