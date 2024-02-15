@@ -32,7 +32,7 @@ Necessário Python 3.10.7 ou superior para rodar esse script, baixe e instale a 
 Em Unix ou MacOs:
 
 ```bash
-   .venv/bin/activate
+  source .venv/bin/activate
  ```
 
 4.**Instale as dependências necessárias:**
