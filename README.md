@@ -29,7 +29,7 @@ Necessário Python 3.10.7 ou superior para rodar esse script, baixe e instale a 
 ```bash
    .venv\Scripts\activate
  ```
-3.1 **Em Unix ou MacOs:**
+3.1 **Em Linux ou MacOS:**
 
 ```bash
   source .venv/bin/activate
