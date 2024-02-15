@@ -10,40 +10,45 @@ Este é um script Python que atualiza automaticamente uma planilha do Google She
 
 ## Como Usar
 
+Necessário Python 3.10.7 ou superior para rodar esse script, baixe e instale a versão mais recente do Python clicando [AQUI](https://www.python.org/downloads/)
+
 1.**Clone esse repositório:**
 
 ```bash
    git clone https://github.com/dvzmr/tunts-rock-desafio-2024.git
  ```
 
-2.**Crie e ative um Ambiente Virtual Python na pasta do projeto**
+2.**Crie um Ambiente Virtual Python na pasta do projeto**
 
 ```bash
    virtualenv .venv
  ```
 
+3.**Ative o Ambiente Virtual Python criado na pasta do projeto**
+
 ```bash
    .venv\Scripts\activate
  ```
 
-3.**Instale as dependências necessárias:**
+4.**Instale as dependências necessárias:**
 
    ```bash
    pip install -r requirements.txt
  ```
-4.**Configure as credenciais da API do Google Sheets:**
+
+5.**Configure as credenciais da API do Google Sheets:**
 
 - Crie um projeto no [**Google Cloud Console**](https://console.cloud.google.com/)
 - Ative a API do Google Sheets no projeto, não utilize a versão readonly.
 - Crie credenciais OAUTH 2.0 e faça o download do arquivo JSON.
 - Renomeie o arquivo JSON como credentials.json e coloque-o no mesmo diretório que o script.
 
-5.**Execute o Script**
+6.**Execute o Script**
 
    ```bash
    python main.py
  ```
-6.**Para executar os testes use o comando no diretório raiz do projeto:**
+7.**Para executar os testes use o comando no diretório raiz do projeto:**
 
    ```bash
    pytest test/test_main.py -v
