@@ -18,16 +18,21 @@ Necessário Python 3.10.7 ou superior para rodar esse script, baixe e instale a 
    git clone https://github.com/dvzmr/tunts-rock-desafio-2024.git
  ```
 
-2.**Crie um Ambiente Virtual Python na pasta do projeto**
+2.**Crie um Ambiente Virtual Python na pasta do projeto:**
 
 ```bash
    virtualenv .venv
  ```
 
-3.**Ative o Ambiente Virtual Python criado na pasta do projeto**
+3.**Ative o Ambiente Virtual Python criado na pasta do projeto:**
 
 ```bash
    .venv\Scripts\activate
+ ```
+Em Unix ou MacOs:
+
+```bash
+   .venv/bin/activate
  ```
 
 4.**Instale as dependências necessárias:**
