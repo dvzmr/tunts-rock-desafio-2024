@@ -65,6 +65,8 @@ Necessário Python 3.10.7 ou superior para rodar esse script, baixe e instale a 
 
 2.**Os valores que foram arredondados e desdobramentos de seus resultados foram considerados no momento do desenvolvimento dessa aplicação.**
 
+3.**Caso queira adaptar esse script para ser utilizado em outras tabelas e outros formatos de tabela você deve alterar a variável "SPREADSHEET_ID" no "main.py".**
+
 
 ## Contato e Autoria
 [David Moura](https://www.linkedin.com/in/davidmouraz/) \
